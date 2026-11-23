@@ -106,8 +106,15 @@
                         </div>
                     </div>
                 @empty
-                    <div class="text-center py-8 text-slate-400 text-xs">
-                        Belum ada kartu dibuat. Silakan tambahkan kartu pertama Anda.
+                    <div class="text-center py-8 px-4 text-slate-500 text-xs space-y-3">
+                        <p class="text-slate-400">Belum ada kartu dibuat di database.</p>
+                        <form action="{{ route('admin.seed.defaults') }}" method="POST" onsubmit="return confirm('Muat data kartu dan tombol bawaan KIW Commercial?')">
+                            @csrf
+                            <button type="submit" class="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs shadow-md shadow-blue-600/20 transition-all cursor-pointer">
+                                <i data-lucide="download" class="w-4 h-4"></i>
+                                <span>Klik di Sini untuk Memuat Kartu Bawaan KIW</span>
+                            </button>
+                        </form>
                     </div>
                 @endforelse
             </div>

@@ -21,6 +21,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 // Protected Admin Panel Routes
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/seed-defaults', [DashboardController::class, 'seedDefaults'])->name('seed.defaults');
 
     // Settings & Theme Customizer
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
