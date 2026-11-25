@@ -152,4 +152,16 @@ class AdminTest extends TestCase
         $deleteResponse->assertRedirect('/admin/slides');
         $this->assertNull(Slide::find($card->id));
     }
+
+    public function test_admin_can_seed_defaults(): void
+    {
+        $user = User::first();
+        $this->actingAs($user);
+
+        $response = $this->post(route('admin.seed.defaults'));
+        $response->assertRedirect('/admin');
+        $response->assertSessionHas('success');
+
+        $this->assertGreaterThan(0, Slide::count());
+    }
 }

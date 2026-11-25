@@ -29,7 +29,19 @@ class DashboardController extends Controller
 
     public function seedDefaults(): RedirectResponse
     {
-        Artisan::call('db:seed', ['--force' => true]);
-        return redirect()->route('admin.dashboard')->with('success', 'Data bawaan kartu dan tombol KIW berhasil dimuat ke database!');
+        try {
+            // Jalankan migrasi terlebih dahulu jika tabel belum ada di database production
+            Artisan::call('migrate', ['--force' => true]);
+
+            // Jalankan seeder bawaan KIW
+            Artisan::call('db:seed', [
+                '--class' => 'Database\\Seeders\\KiwCommercialSeeder',
+                '--force' => true,
+            ]);
+
+            return redirect()->route('admin.dashboard')->with('success', 'Tabel dan data bawaan kartu KIW berhasil dimuat ke database!');
+        } catch (\Throwable $e) {
+            return redirect()->route('admin.dashboard')->with('error', 'Gagal memuat data bawaan: ' . $e->getMessage());
+        }
     }
 }

@@ -6,6 +6,7 @@ use App\Models\SiteSetting;
 use App\Models\Slide;
 use App\Models\SlideItem;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 class KiwCommercialSeeder extends Seeder
 {
@@ -38,8 +39,11 @@ class KiwCommercialSeeder extends Seeder
         }
 
         // Reset existing slides to avoid duplicates during reseed
+        // Disable foreign key constraints to prevent truncate error on MySQL
+        Schema::disableForeignKeyConstraints();
         SlideItem::truncate();
         Slide::truncate();
+        Schema::enableForeignKeyConstraints();
 
         // 2. Halaman 1: WEBSITE & PROFIL PT KIW
         $slide1 = Slide::create([
