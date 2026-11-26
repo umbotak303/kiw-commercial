@@ -214,25 +214,27 @@
         }
         .main-card-frame {
             width: 100%;
-            min-height: 100vh;
-            min-height: 100dvh;
-            border-radius: 0;
-            border-width: 0;
+            height: 100vh;
+            height: 100dvh;
+            border-radius: 0 !important;
+            border-width: 0 !important;
+            box-shadow: none !important;
         }
         @media (min-width: 768px) {
             .main-card-frame {
-                width: 100%;
-                max-width: 440px;
-                min-height: auto;
-                height: auto;
-                border-radius: var(--theme-card-radius, 28px);
-                border-width: 1px;
+                height: 90vh;
+                max-height: 890px;
+                min-height: 700px;
+                max-width: 420px;
+                border-radius: var(--theme-card-radius, 32px) !important;
+                border-width: 1px !important;
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4) !important;
                 margin: auto;
             }
         }
         @media (min-width: 1024px) {
             .main-card-frame {
-                max-width: 450px;
+                max-width: 430px;
             }
         }
         .font-serif {
@@ -368,8 +370,8 @@
     <main class="main-card-frame rounded-none md:{{ $currentTheme['card_radius'] ?? 'rounded-[28px]' }} relative overflow-hidden flex flex-col justify-between select-none md:shadow-2xl md:border md:ring-1 md:ring-black/40"
           style="background-color: var(--theme-card-bg); color: var(--theme-card-text); border-color: var(--theme-card-border);">
 
-        <!-- TOP BAR: Safe area header with dots indicator -->
-        <header class="w-full pt-[max(0.75rem,env(safe-area-inset-top,0.75rem))] pb-1 px-4 sm:px-6 flex items-center justify-center shrink-0 z-30 select-none">
+        <!-- TOP BAR: Centered Dots Indicator (Sesuai [Image 1]) -->
+        <header class="pt-4 pb-2 px-5 flex items-center justify-center shrink-0 z-30 select-none">
             @if(count($slides) > 1)
                 <!-- Slide Dots Indicator -->
                 <div class="flex items-center justify-center gap-2">
@@ -377,13 +379,30 @@
                         <button @click="goToSlide({{ $i }})"
                                 aria-label="Slide {{ $i + 1 }}"
                                 class="transition-all duration-300 rounded-full cursor-pointer"
-                                :class="activeSlide === {{ $i }} ? 'w-5 h-2 shadow-xs' : 'w-2 h-2 hover:opacity-100'"
+                                :class="activeSlide === {{ $i }} ? 'w-2.5 h-2.5 shadow-xs' : 'w-2 h-2 hover:opacity-100'"
                                 :style="activeSlide === {{ $i }} ? 'background-color: var(--theme-card-text);' : 'background-color: var(--theme-card-text); opacity: 0.35;'">
                         </button>
                     @endfor
                 </div>
             @endif
         </header>
+
+        <!-- FLOATING SIDE NAVIGATION ARROWS (Sesuai [Image 1]) -->
+        @if(count($slides) > 1)
+            <!-- Left Arrow (Prev Slide) -->
+            <button @click="prevSlide()"
+                    aria-label="Slide Sebelumnya"
+                    class="absolute left-1.5 sm:left-3 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center shadow-2xl border border-white/15 transition-all duration-200 hover:scale-105 active:scale-95 z-30 cursor-pointer">
+                <i data-lucide="chevron-left" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+            </button>
+
+            <!-- Right Arrow (Next Slide) -->
+            <button @click="nextSlide()"
+                    aria-label="Slide Berikutnya"
+                    class="absolute right-1.5 sm:right-3 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center shadow-2xl border border-white/15 transition-all duration-200 hover:scale-105 active:scale-95 z-30 cursor-pointer">
+                <i data-lucide="chevron-right" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+            </button>
+        @endif
 
         <!-- HORIZONTAL SLIDES CAROUSEL TRACK -->
         <div class="relative w-full flex-1 overflow-hidden min-h-0"
@@ -399,125 +418,130 @@
                         $slideCardText = !empty($slide['card_text']) ? $slide['card_text'] : null;
                     @endphp
 
-                    <div class="w-full h-full shrink-0 flex flex-col items-center justify-center px-4 sm:px-6 md:px-7 py-2 sm:py-3 overflow-y-auto overscroll-contain no-scrollbar"
+                    <div class="w-full h-full shrink-0 flex flex-col justify-between pt-1 sm:pt-2 pb-4 px-5 sm:px-6 overflow-y-auto no-scrollbar"
                          style="@if($slideCardBg) background-color: {{ $slideCardBg }}; @endif @if($slideCardText) color: {{ $slideCardText }}; @endif">
                         
-                        <div class="w-full max-w-[390px] sm:max-w-[400px] mx-auto my-auto flex flex-col items-center">
+                        <!-- UPPER SECTION: LOGO + TITLE + SUBTITLE + SOLID DIVIDER BAR -->
+                        <div class="w-full flex flex-col items-center text-center shrink-0">
                             
-                            <!-- UPPER SECTION: LOGO + TITLE + SUBTITLE + GOLD DIVIDER -->
-                            <div class="w-full flex flex-col items-center text-center shrink-0">
-                                
-                                <!-- Circular White Logo Badge -->
-                                <div class="w-22 h-22 sm:w-26 sm:h-26 rounded-full bg-white shadow-xl flex items-center justify-center p-3 sm:p-3.5 mx-auto border-2 border-[var(--theme-card-border)]/40 shrink-0 select-none transition-transform">
-                                    <img src="{{ asset($settings['logo'] ?? 'assets/logo kiw.png') }}"
-                                         alt="{{ $settings['name'] ?? 'Logo' }}"
-                                         class="w-full h-full object-contain filter drop-shadow-xs select-none pointer-events-none">
-                                </div>
+                            <!-- Circular White Logo Badge -->
+                            <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-white shadow-xl flex items-center justify-center p-3 sm:p-4 mx-auto border-2 border-[var(--theme-card-border)]/40 shrink-0 select-none">
+                                <img src="{{ asset($settings['logo'] ?? 'assets/logo kiw.png') }}"
+                                     alt="{{ $settings['name'] ?? 'Logo' }}"
+                                     class="w-full h-full object-contain filter drop-shadow-xs select-none pointer-events-none">
+                            </div>
 
-                                <!-- Main Card Title -->
-                                <h1 class="font-serif font-bold text-xl sm:text-2xl tracking-wider text-center uppercase mt-3 mb-1 leading-tight px-2"
-                                    style="color: var(--theme-card-text);">
-                                    {{ $slide['title'] }}
-                                </h1>
+                            <!-- Main Card Title -->
+                            <h1 class="font-serif font-bold text-2xl sm:text-3xl tracking-wider text-center uppercase mt-6 mb-2 leading-tight"
+                                style="color: var(--theme-card-text);">
+                                {{ $slide['title'] }}
+                            </h1>
 
-                                <!-- Subtitle / Slide Prompt -->
-                                @if(!empty($slide['subtitle']))
-                                    <p class="font-serif font-medium text-xs sm:text-[13px] tracking-[0.14em] text-center uppercase mb-2.5 px-2"
-                                        style="color: var(--theme-card-text); opacity: 0.9;">
-                                        {{ $slide['subtitle'] }}
-                                    </p>
+                            <!-- Subtitle / Slide Prompt -->
+                            @if(!empty($slide['subtitle']))
+                                <p class="font-serif font-medium text-xs sm:text-[13px] tracking-[0.16em] text-center uppercase mb-3"
+                                    style="color: var(--theme-card-text); opacity: 0.9;">
+                                    {{ $slide['subtitle'] }}
+                                </p>
+                            @endif
+
+                            <!-- Solid Divider Bar (Sesuai [Image 1]) -->
+                            <div class="w-4/5 max-w-[260px] h-3 sm:h-3.5 mx-auto mb-6 shadow-xs"
+                                 style="background-color: var(--theme-card-border);"></div>
+                        </div>
+
+                        <!-- MIDDLE SECTION: FRAMED BUTTON LIST (Sesuai [Image 1]) -->
+                        <div class="w-full max-w-[340px] sm:max-w-[360px] mx-auto space-y-3.5 sm:space-y-4 my-auto pb-4">
+                            @foreach($slide['items'] as $item)
+                                @if(($item['action_type'] ?? '') === 'whatsapp')
+                                    <!-- WhatsApp Action -->
+                                    <a href="{{ $item['url'] }}" target="_blank"
+                                       class="group block w-full py-4 sm:py-5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90"
+                                       style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
+                                        <span class="block font-serif italic text-[15px] sm:text-base leading-snug tracking-wide"
+                                              style="color: var(--theme-btn-text);">
+                                            {{ $item['title'] }}
+                                        </span>
+                                    </a>
+
+                                @elseif(($item['action_type'] ?? '') === 'modal_inquiry')
+                                    <!-- Inquiry Modal Action -->
+                                    <button @click="openInquiry('{{ addslashes($item['title']) }}')"
+                                            class="group block w-full py-4 sm:py-5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90"
+                                            style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
+                                        <span class="block font-serif italic text-[15px] sm:text-base leading-snug tracking-wide"
+                                              style="color: var(--theme-btn-text);">
+                                            {{ $item['title'] }}
+                                        </span>
+                                    </button>
+
+                                @elseif(($item['action_type'] ?? '') === 'call')
+                                    <!-- Direct Call Action -->
+                                    @php
+                                        $callUrl = $item['url'] ?? '';
+                                        if ($callUrl && !str_starts_with($callUrl, 'tel:')) {
+                                            $cleanNumber = preg_replace('/[^0-9+]/', '', $callUrl);
+                                            $callUrl = 'tel:' . $cleanNumber;
+                                        }
+                                    @endphp
+                                    <a href="{{ $callUrl }}"
+                                       class="group block w-full py-4 sm:py-5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90"
+                                       style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
+                                        <span class="block font-serif italic text-[15px] sm:text-base leading-snug tracking-wide"
+                                              style="color: var(--theme-btn-text);">
+                                            {{ $item['title'] }}
+                                        </span>
+                                    </a>
+
+                                @elseif(($item['action_type'] ?? '') === 'modal_detail')
+                                    <!-- Detail Modal Action -->
+                                    <button @click="openDetail('{{ addslashes($item['title']) }}', '{{ addslashes($item['badge'] ?? '') }}', '{{ addslashes($item['subtitle'] ?? '') }}', '{{ addslashes($item['detail_content'] ?? '') }}')"
+                                            class="group block w-full py-4 sm:py-5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90"
+                                            style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
+                                        <span class="block font-serif italic text-[15px] sm:text-base leading-snug tracking-wide"
+                                              style="color: var(--theme-btn-text);">
+                                            {{ $item['title'] }}
+                                        </span>
+                                    </button>
+
+                                @elseif(($item['action_type'] ?? '') === 'email')
+                                    <!-- Direct Email Action -->
+                                    @php
+                                        $mailUrl = $item['url'] ?? '';
+                                        if ($mailUrl && !str_starts_with($mailUrl, 'mailto:')) {
+                                            $mailUrl = 'mailto:' . trim($mailUrl);
+                                        }
+                                    @endphp
+                                    <a href="{{ $mailUrl }}"
+                                       class="group block w-full py-4 sm:py-5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90"
+                                       style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
+                                        <span class="block font-serif italic text-[15px] sm:text-base leading-snug tracking-wide"
+                                              style="color: var(--theme-btn-text);">
+                                            {{ $item['title'] }}
+                                        </span>
+                                    </a>
+
+                                @else
+                                    <!-- Maps / External Link Action -->
+                                    <a href="{{ $item['url'] }}" target="_blank"
+                                       class="group block w-full py-4 sm:py-5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90"
+                                       style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
+                                        <span class="block font-serif italic text-[15px] sm:text-base leading-snug tracking-wide"
+                                              style="color: var(--theme-btn-text);">
+                                            {{ $item['title'] }}
+                                        </span>
+                                    </a>
                                 @endif
+                            @endforeach
+                        </div>
 
-                                <!-- Solid Golden Divider Bar -->
-                                <div class="w-20 sm:w-24 h-1 mx-auto mb-3.5 sm:mb-4 rounded-full shadow-xs"
-                                     style="background-color: var(--theme-card-border);"></div>
-                            </div>
-
-                            <!-- MIDDLE SECTION: FRAMED BUTTON LIST -->
-                            <div class="w-full space-y-2.5 sm:space-y-3">
-                                @foreach($slide['items'] as $item)
-                                    @if(($item['action_type'] ?? '') === 'whatsapp')
-                                        <!-- WhatsApp Action -->
-                                        <a href="{{ $item['url'] }}" target="_blank"
-                                           class="group flex items-center justify-center w-full min-h-[46px] sm:min-h-[50px] py-3 sm:py-3.5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90 rounded-sm"
-                                           style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
-                                            <span class="block font-serif italic text-sm sm:text-[15px] leading-snug tracking-wide break-words"
-                                                  style="color: var(--theme-btn-text);">
-                                                {{ $item['title'] }}
-                                            </span>
-                                        </a>
-
-                                    @elseif(($item['action_type'] ?? '') === 'modal_inquiry')
-                                        <!-- Inquiry Modal Action -->
-                                        <button @click="openInquiry('{{ addslashes($item['title']) }}')"
-                                                class="group flex items-center justify-center w-full min-h-[46px] sm:min-h-[50px] py-3 sm:py-3.5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90 rounded-sm"
-                                                style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
-                                            <span class="block font-serif italic text-sm sm:text-[15px] leading-snug tracking-wide break-words"
-                                                  style="color: var(--theme-btn-text);">
-                                                {{ $item['title'] }}
-                                            </span>
-                                        </button>
-
-                                    @elseif(($item['action_type'] ?? '') === 'call')
-                                        <!-- Direct Call Action -->
-                                        @php
-                                            $callUrl = $item['url'] ?? '';
-                                            if ($callUrl && !str_starts_with($callUrl, 'tel:')) {
-                                                $cleanNumber = preg_replace('/[^0-9+]/', '', $callUrl);
-                                                $callUrl = 'tel:' . $cleanNumber;
-                                            }
-                                        @endphp
-                                        <a href="{{ $callUrl }}"
-                                           class="group flex items-center justify-center w-full min-h-[46px] sm:min-h-[50px] py-3 sm:py-3.5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90 rounded-sm"
-                                           style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
-                                            <span class="block font-serif italic text-sm sm:text-[15px] leading-snug tracking-wide break-words"
-                                                  style="color: var(--theme-btn-text);">
-                                                {{ $item['title'] }}
-                                            </span>
-                                        </a>
-
-                                    @elseif(($item['action_type'] ?? '') === 'modal_detail')
-                                        <!-- Detail Modal Action -->
-                                        <button @click="openDetail('{{ addslashes($item['title']) }}', '{{ addslashes($item['badge'] ?? '') }}', '{{ addslashes($item['subtitle'] ?? '') }}', '{{ addslashes($item['detail_content'] ?? '') }}')"
-                                                class="group flex items-center justify-center w-full min-h-[46px] sm:min-h-[50px] py-3 sm:py-3.5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90 rounded-sm"
-                                                style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
-                                            <span class="block font-serif italic text-sm sm:text-[15px] leading-snug tracking-wide break-words"
-                                                  style="color: var(--theme-btn-text);">
-                                                {{ $item['title'] }}
-                                            </span>
-                                        </button>
-
-                                    @elseif(($item['action_type'] ?? '') === 'email')
-                                        <!-- Direct Email Action -->
-                                        @php
-                                            $mailUrl = $item['url'] ?? '';
-                                            if ($mailUrl && !str_starts_with($mailUrl, 'mailto:')) {
-                                                $mailUrl = 'mailto:' . trim($mailUrl);
-                                            }
-                                        @endphp
-                                        <a href="{{ $mailUrl }}"
-                                           class="group flex items-center justify-center w-full min-h-[46px] sm:min-h-[50px] py-3 sm:py-3.5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90 rounded-sm"
-                                           style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
-                                            <span class="block font-serif italic text-sm sm:text-[15px] leading-snug tracking-wide break-words"
-                                                  style="color: var(--theme-btn-text);">
-                                                {{ $item['title'] }}
-                                            </span>
-                                        </a>
-
-                                    @else
-                                        <!-- Maps / External Link Action -->
-                                        <a href="{{ $item['url'] }}" target="_blank"
-                                           class="group flex items-center justify-center w-full min-h-[46px] sm:min-h-[50px] py-3 sm:py-3.5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90 rounded-sm"
-                                           style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
-                                            <span class="block font-serif italic text-sm sm:text-[15px] leading-snug tracking-wide break-words"
-                                                  style="color: var(--theme-btn-text);">
-                                                {{ $item['title'] }}
-                                            </span>
-                                        </a>
-                                    @endif
-                                @endforeach
-                            </div>
-
+                        <!-- BOTTOM SECTION: FOOTER (Sesuai [Image 1]) -->
+                        <div class="text-center pt-2 pb-3 select-none">
+                            <a href="{{ route('admin.dashboard') }}" title="Panel Admin"
+                               class="text-[10px] sm:text-[11px] tracking-widest font-mono uppercase hover:opacity-100 transition-opacity inline-block"
+                               style="color: var(--theme-card-text); opacity: 0.45;">
+                                {{ $settings['footer_badge'] ?? 'KIW COMMERCIAL • INDUSTRIAL ESTATE' }}
+                            </a>
                         </div>
 
                     </div>
@@ -525,40 +549,6 @@
 
             </div>
         </div>
-
-        <!-- BOTTOM BAR: Navigation Controls (Prev/Next) + Centered Footer Link -->
-        <footer class="w-full px-4 sm:px-6 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom,0.75rem))] flex items-center justify-between shrink-0 z-30 select-none">
-            @if(count($slides) > 1)
-                <!-- Prev Slide Button -->
-                <button @click="prevSlide()"
-                        aria-label="Slide Sebelumnya"
-                        class="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/30 hover:bg-black/55 active:bg-black/75 text-white border border-white/15 active:scale-95 transition-all cursor-pointer shadow-xs">
-                    <i data-lucide="chevron-left" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                </button>
-            @else
-                <div class="w-8 sm:w-9"></div>
-            @endif
-
-            <!-- Centered Footer Badge Link -->
-            <div class="flex-1 text-center px-2">
-                <a href="{{ route('admin.dashboard') }}" title="Panel Admin"
-                   class="text-[10px] sm:text-[11px] tracking-widest font-mono uppercase hover:opacity-100 transition-opacity inline-block"
-                   style="color: var(--theme-card-text); opacity: 0.5;">
-                    {{ $settings['footer_badge'] ?? 'KIW COMMERCIAL' }}
-                </a>
-            </div>
-
-            @if(count($slides) > 1)
-                <!-- Next Slide Button -->
-                <button @click="nextSlide()"
-                        aria-label="Slide Berikutnya"
-                        class="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/30 hover:bg-black/55 active:bg-black/75 text-white border border-white/15 active:scale-95 transition-all cursor-pointer shadow-xs">
-                    <i data-lucide="chevron-right" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                </button>
-            @else
-                <div class="w-8 sm:w-9"></div>
-            @endif
-        </footer>
     </main>
 
     <!-- INQUIRY / BOOKING MODAL (Direct to WhatsApp) -->
