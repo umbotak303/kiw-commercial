@@ -370,23 +370,6 @@
     <main class="main-card-frame rounded-none md:{{ $currentTheme['card_radius'] ?? 'rounded-[28px]' }} relative overflow-hidden flex flex-col justify-between select-none md:shadow-2xl md:border md:ring-1 md:ring-black/40"
           style="background-color: var(--theme-card-bg); color: var(--theme-card-text); border-color: var(--theme-card-border);">
 
-        <!-- TOP BAR: Centered Dots Indicator (Sesuai [Image 1]) -->
-        <header class="pt-4 pb-2 px-5 flex items-center justify-center shrink-0 z-30 select-none">
-            @if(count($slides) > 1)
-                <!-- Slide Dots Indicator -->
-                <div class="flex items-center justify-center gap-2">
-                    @for($i = 0; $i < count($slides); $i++)
-                        <button @click="goToSlide({{ $i }})"
-                                aria-label="Slide {{ $i + 1 }}"
-                                class="transition-all duration-300 rounded-full cursor-pointer"
-                                :class="activeSlide === {{ $i }} ? 'w-2.5 h-2.5 shadow-xs' : 'w-2 h-2 hover:opacity-100'"
-                                :style="activeSlide === {{ $i }} ? 'background-color: var(--theme-card-text);' : 'background-color: var(--theme-card-text); opacity: 0.35;'">
-                        </button>
-                    @endfor
-                </div>
-            @endif
-        </header>
-
         <!-- FLOATING SIDE NAVIGATION ARROWS (Sesuai [Image 1]) -->
         @if(count($slides) > 1)
             <!-- Left Arrow (Prev Slide) -->
@@ -418,7 +401,7 @@
                         $slideCardText = !empty($slide['card_text']) ? $slide['card_text'] : null;
                     @endphp
 
-                    <div class="w-full h-full shrink-0 flex flex-col justify-between pt-1 sm:pt-2 pb-4 px-5 sm:px-6 overflow-y-auto no-scrollbar"
+                    <div class="w-full h-full shrink-0 flex flex-col justify-between pt-5 sm:pt-7 pb-2 px-5 sm:px-6 overflow-y-auto no-scrollbar"
                          style="@if($slideCardBg) background-color: {{ $slideCardBg }}; @endif @if($slideCardText) color: {{ $slideCardText }}; @endif">
                         
                         <!-- UPPER SECTION: LOGO + TITLE + SUBTITLE + SOLID DIVIDER BAR -->
@@ -535,20 +518,37 @@
                             @endforeach
                         </div>
 
-                        <!-- BOTTOM SECTION: FOOTER (Sesuai [Image 1]) -->
-                        <div class="text-center pt-2 pb-3 select-none">
-                            <a href="{{ route('admin.dashboard') }}" title="Panel Admin"
-                               class="text-[10px] sm:text-[11px] tracking-widest font-mono uppercase hover:opacity-100 transition-opacity inline-block"
-                               style="color: var(--theme-card-text); opacity: 0.45;">
-                                {{ $settings['footer_badge'] ?? 'KIW COMMERCIAL • INDUSTRIAL ESTATE' }}
-                            </a>
-                        </div>
-
                     </div>
                 @endforeach
 
             </div>
         </div>
+
+        <!-- BOTTOM BAR: Slide Dots Indicator (Dipindah ke bawah) & Footer Link -->
+        <footer class="w-full pt-1 pb-4 sm:pb-5 px-5 flex flex-col items-center justify-center shrink-0 z-30 select-none gap-2.5">
+            @if(count($slides) > 1)
+                <!-- Slide Dots Indicator -->
+                <div class="flex items-center justify-center gap-2">
+                    @for($i = 0; $i < count($slides); $i++)
+                        <button @click="goToSlide({{ $i }})"
+                                aria-label="Slide {{ $i + 1 }}"
+                                class="transition-all duration-300 rounded-full cursor-pointer"
+                                :class="activeSlide === {{ $i }} ? 'w-2.5 h-2.5 shadow-xs' : 'w-2 h-2 hover:opacity-100'"
+                                :style="activeSlide === {{ $i }} ? 'background-color: var(--theme-card-text);' : 'background-color: var(--theme-card-text); opacity: 0.35;'">
+                        </button>
+                    @endfor
+                </div>
+            @endif
+
+            <!-- Centered Footer Badge Link -->
+            <div class="text-center">
+                <a href="{{ route('admin.dashboard') }}" title="Panel Admin"
+                   class="text-[10px] sm:text-[11px] tracking-widest font-mono uppercase hover:opacity-100 transition-opacity inline-block"
+                   style="color: var(--theme-card-text); opacity: 0.45;">
+                    {{ $settings['footer_badge'] ?? 'KIW COMMERCIAL • INDUSTRIAL ESTATE' }}
+                </a>
+            </div>
+        </footer>
     </main>
 
     <!-- INQUIRY / BOOKING MODAL (Direct to WhatsApp) -->
