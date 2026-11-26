@@ -214,24 +214,25 @@
         }
         .main-card-frame {
             width: 100%;
-            height: 100vh;
-            height: 100dvh;
+            min-height: 100vh;
+            min-height: 100dvh;
             border-radius: 0;
             border-width: 0;
         }
         @media (min-width: 768px) {
             .main-card-frame {
-                height: 90vh;
-                max-height: 890px;
-                min-height: 700px;
-                max-width: 480px;
+                width: 100%;
+                max-width: 440px;
+                min-height: auto;
+                height: auto;
                 border-radius: var(--theme-card-radius, 28px);
                 border-width: 1px;
+                margin: auto;
             }
         }
         @media (min-width: 1024px) {
             .main-card-frame {
-                max-width: 500px;
+                max-width: 450px;
             }
         }
         .font-serif {
@@ -384,23 +385,6 @@
             @endif
         </header>
 
-        <!-- FLOATING SIDE NAVIGATION ARROWS (Desktop Only: Placed on outer sides of the card) -->
-        @if(count($slides) > 1)
-            <!-- Desktop Left Arrow (Prev Slide) -->
-            <button @click="prevSlide()"
-                    aria-label="Slide Sebelumnya"
-                    class="hidden md:flex absolute -left-14 lg:-left-16 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-slate-900/85 hover:bg-slate-900 text-white items-center justify-center shadow-xl border border-white/20 transition-all duration-200 hover:scale-110 active:scale-95 z-30 cursor-pointer">
-                <i data-lucide="chevron-left" class="w-6 h-6"></i>
-            </button>
-
-            <!-- Desktop Right Arrow (Next Slide) -->
-            <button @click="nextSlide()"
-                    aria-label="Slide Berikutnya"
-                    class="hidden md:flex absolute -right-14 lg:-right-16 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-slate-900/85 hover:bg-slate-900 text-white items-center justify-center shadow-xl border border-white/20 transition-all duration-200 hover:scale-110 active:scale-95 z-30 cursor-pointer">
-                <i data-lucide="chevron-right" class="w-6 h-6"></i>
-            </button>
-        @endif
-
         <!-- HORIZONTAL SLIDES CAROUSEL TRACK -->
         <div class="relative w-full flex-1 overflow-hidden min-h-0"
              @touchstart="handleTouchStart($event)"
@@ -415,125 +399,126 @@
                         $slideCardText = !empty($slide['card_text']) ? $slide['card_text'] : null;
                     @endphp
 
-                    <div class="w-full h-full shrink-0 flex flex-col justify-between px-4 sm:px-6 md:px-8 py-2 overflow-y-auto overscroll-contain no-scrollbar"
+                    <div class="w-full h-full shrink-0 flex flex-col items-center justify-center px-4 sm:px-6 md:px-7 py-2 sm:py-3 overflow-y-auto overscroll-contain no-scrollbar"
                          style="@if($slideCardBg) background-color: {{ $slideCardBg }}; @endif @if($slideCardText) color: {{ $slideCardText }}; @endif">
                         
-                        <!-- UPPER SECTION: LOGO + TITLE + SUBTITLE + GOLD DIVIDER -->
-                        <div class="w-full flex flex-col items-center text-center shrink-0 pt-1 sm:pt-2">
+                        <div class="w-full max-w-[390px] sm:max-w-[400px] mx-auto my-auto flex flex-col items-center">
                             
-                            <!-- Circular White Logo Badge -->
-                            <div class="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full bg-white shadow-xl flex items-center justify-center p-3 sm:p-4 mx-auto border-2 border-[var(--theme-card-border)]/40 shrink-0 select-none transition-transform">
-                                <img src="{{ asset($settings['logo'] ?? 'assets/logo kiw.png') }}"
-                                     alt="{{ $settings['name'] ?? 'Logo' }}"
-                                     class="w-full h-full object-contain filter drop-shadow-xs select-none pointer-events-none">
+                            <!-- UPPER SECTION: LOGO + TITLE + SUBTITLE + GOLD DIVIDER -->
+                            <div class="w-full flex flex-col items-center text-center shrink-0">
+                                
+                                <!-- Circular White Logo Badge -->
+                                <div class="w-22 h-22 sm:w-26 sm:h-26 rounded-full bg-white shadow-xl flex items-center justify-center p-3 sm:p-3.5 mx-auto border-2 border-[var(--theme-card-border)]/40 shrink-0 select-none transition-transform">
+                                    <img src="{{ asset($settings['logo'] ?? 'assets/logo kiw.png') }}"
+                                         alt="{{ $settings['name'] ?? 'Logo' }}"
+                                         class="w-full h-full object-contain filter drop-shadow-xs select-none pointer-events-none">
+                                </div>
+
+                                <!-- Main Card Title -->
+                                <h1 class="font-serif font-bold text-xl sm:text-2xl tracking-wider text-center uppercase mt-3 mb-1 leading-tight px-2"
+                                    style="color: var(--theme-card-text);">
+                                    {{ $slide['title'] }}
+                                </h1>
+
+                                <!-- Subtitle / Slide Prompt -->
+                                @if(!empty($slide['subtitle']))
+                                    <p class="font-serif font-medium text-xs sm:text-[13px] tracking-[0.14em] text-center uppercase mb-2.5 px-2"
+                                        style="color: var(--theme-card-text); opacity: 0.9;">
+                                        {{ $slide['subtitle'] }}
+                                    </p>
+                                @endif
+
+                                <!-- Solid Golden Divider Bar -->
+                                <div class="w-20 sm:w-24 h-1 mx-auto mb-3.5 sm:mb-4 rounded-full shadow-xs"
+                                     style="background-color: var(--theme-card-border);"></div>
                             </div>
 
-                            <!-- Main Card Title -->
-                            <h1 class="font-serif font-bold text-xl sm:text-2xl md:text-3xl tracking-wider text-center uppercase mt-3 sm:mt-4 mb-1 sm:mb-1.5 leading-tight px-2"
-                                style="color: var(--theme-card-text);">
-                                {{ $slide['title'] }}
-                            </h1>
+                            <!-- MIDDLE SECTION: FRAMED BUTTON LIST -->
+                            <div class="w-full space-y-2.5 sm:space-y-3">
+                                @foreach($slide['items'] as $item)
+                                    @if(($item['action_type'] ?? '') === 'whatsapp')
+                                        <!-- WhatsApp Action -->
+                                        <a href="{{ $item['url'] }}" target="_blank"
+                                           class="group flex items-center justify-center w-full min-h-[46px] sm:min-h-[50px] py-3 sm:py-3.5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90 rounded-sm"
+                                           style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
+                                            <span class="block font-serif italic text-sm sm:text-[15px] leading-snug tracking-wide break-words"
+                                                  style="color: var(--theme-btn-text);">
+                                                {{ $item['title'] }}
+                                            </span>
+                                        </a>
 
-                            <!-- Subtitle / Slide Prompt -->
-                            @if(!empty($slide['subtitle']))
-                                <p class="font-serif font-medium text-xs sm:text-[13px] tracking-[0.14em] sm:tracking-[0.16em] text-center uppercase mb-2.5 sm:mb-3 px-2"
-                                    style="color: var(--theme-card-text); opacity: 0.9;">
-                                    {{ $slide['subtitle'] }}
-                                </p>
-                            @endif
+                                    @elseif(($item['action_type'] ?? '') === 'modal_inquiry')
+                                        <!-- Inquiry Modal Action -->
+                                        <button @click="openInquiry('{{ addslashes($item['title']) }}')"
+                                                class="group flex items-center justify-center w-full min-h-[46px] sm:min-h-[50px] py-3 sm:py-3.5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90 rounded-sm"
+                                                style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
+                                            <span class="block font-serif italic text-sm sm:text-[15px] leading-snug tracking-wide break-words"
+                                                  style="color: var(--theme-btn-text);">
+                                                {{ $item['title'] }}
+                                            </span>
+                                        </button>
 
-                            <!-- Solid Golden Divider Bar -->
-                            <div class="w-3/4 max-w-[220px] sm:max-w-[260px] h-2.5 sm:h-3.5 mx-auto mb-3 sm:mb-5 shadow-xs"
-                                 style="background-color: var(--theme-card-border);"></div>
+                                    @elseif(($item['action_type'] ?? '') === 'call')
+                                        <!-- Direct Call Action -->
+                                        @php
+                                            $callUrl = $item['url'] ?? '';
+                                            if ($callUrl && !str_starts_with($callUrl, 'tel:')) {
+                                                $cleanNumber = preg_replace('/[^0-9+]/', '', $callUrl);
+                                                $callUrl = 'tel:' . $cleanNumber;
+                                            }
+                                        @endphp
+                                        <a href="{{ $callUrl }}"
+                                           class="group flex items-center justify-center w-full min-h-[46px] sm:min-h-[50px] py-3 sm:py-3.5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90 rounded-sm"
+                                           style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
+                                            <span class="block font-serif italic text-sm sm:text-[15px] leading-snug tracking-wide break-words"
+                                                  style="color: var(--theme-btn-text);">
+                                                {{ $item['title'] }}
+                                            </span>
+                                        </a>
+
+                                    @elseif(($item['action_type'] ?? '') === 'modal_detail')
+                                        <!-- Detail Modal Action -->
+                                        <button @click="openDetail('{{ addslashes($item['title']) }}', '{{ addslashes($item['badge'] ?? '') }}', '{{ addslashes($item['subtitle'] ?? '') }}', '{{ addslashes($item['detail_content'] ?? '') }}')"
+                                                class="group flex items-center justify-center w-full min-h-[46px] sm:min-h-[50px] py-3 sm:py-3.5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90 rounded-sm"
+                                                style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
+                                            <span class="block font-serif italic text-sm sm:text-[15px] leading-snug tracking-wide break-words"
+                                                  style="color: var(--theme-btn-text);">
+                                                {{ $item['title'] }}
+                                            </span>
+                                        </button>
+
+                                    @elseif(($item['action_type'] ?? '') === 'email')
+                                        <!-- Direct Email Action -->
+                                        @php
+                                            $mailUrl = $item['url'] ?? '';
+                                            if ($mailUrl && !str_starts_with($mailUrl, 'mailto:')) {
+                                                $mailUrl = 'mailto:' . trim($mailUrl);
+                                            }
+                                        @endphp
+                                        <a href="{{ $mailUrl }}"
+                                           class="group flex items-center justify-center w-full min-h-[46px] sm:min-h-[50px] py-3 sm:py-3.5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90 rounded-sm"
+                                           style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
+                                            <span class="block font-serif italic text-sm sm:text-[15px] leading-snug tracking-wide break-words"
+                                                  style="color: var(--theme-btn-text);">
+                                                {{ $item['title'] }}
+                                            </span>
+                                        </a>
+
+                                    @else
+                                        <!-- Maps / External Link Action -->
+                                        <a href="{{ $item['url'] }}" target="_blank"
+                                           class="group flex items-center justify-center w-full min-h-[46px] sm:min-h-[50px] py-3 sm:py-3.5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90 rounded-sm"
+                                           style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
+                                            <span class="block font-serif italic text-sm sm:text-[15px] leading-snug tracking-wide break-words"
+                                                  style="color: var(--theme-btn-text);">
+                                                {{ $item['title'] }}
+                                            </span>
+                                        </a>
+                                    @endif
+                                @endforeach
+                            </div>
+
                         </div>
-
-                        <!-- MIDDLE SECTION: FRAMED BUTTON LIST -->
-                        <div class="w-full max-w-[390px] sm:max-w-[420px] mx-auto space-y-2.5 sm:space-y-3.5 py-1 sm:py-2">
-                            @foreach($slide['items'] as $item)
-                                @if(($item['action_type'] ?? '') === 'whatsapp')
-                                    <!-- WhatsApp Action -->
-                                    <a href="{{ $item['url'] }}" target="_blank"
-                                       class="group block w-full py-3 sm:py-3.5 md:py-4 px-4 sm:px-5 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90 rounded-sm"
-                                       style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
-                                        <span class="block font-serif italic text-sm sm:text-[15px] md:text-base leading-snug tracking-wide break-words"
-                                              style="color: var(--theme-btn-text);">
-                                            {{ $item['title'] }}
-                                        </span>
-                                    </a>
-
-                                @elseif(($item['action_type'] ?? '') === 'modal_inquiry')
-                                    <!-- Inquiry Modal Action -->
-                                    <button @click="openInquiry('{{ addslashes($item['title']) }}')"
-                                            class="group block w-full py-3 sm:py-3.5 md:py-4 px-4 sm:px-5 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90 rounded-sm"
-                                            style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
-                                        <span class="block font-serif italic text-sm sm:text-[15px] md:text-base leading-snug tracking-wide break-words"
-                                              style="color: var(--theme-btn-text);">
-                                            {{ $item['title'] }}
-                                        </span>
-                                    </button>
-
-                                @elseif(($item['action_type'] ?? '') === 'call')
-                                    <!-- Direct Call Action -->
-                                    @php
-                                        $callUrl = $item['url'] ?? '';
-                                        if ($callUrl && !str_starts_with($callUrl, 'tel:')) {
-                                            $cleanNumber = preg_replace('/[^0-9+]/', '', $callUrl);
-                                            $callUrl = 'tel:' . $cleanNumber;
-                                        }
-                                    @endphp
-                                    <a href="{{ $callUrl }}"
-                                       class="group block w-full py-3 sm:py-3.5 md:py-4 px-4 sm:px-5 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90 rounded-sm"
-                                       style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
-                                        <span class="block font-serif italic text-sm sm:text-[15px] md:text-base leading-snug tracking-wide break-words"
-                                              style="color: var(--theme-btn-text);">
-                                            {{ $item['title'] }}
-                                        </span>
-                                    </a>
-
-                                @elseif(($item['action_type'] ?? '') === 'modal_detail')
-                                    <!-- Detail Modal Action -->
-                                    <button @click="openDetail('{{ addslashes($item['title']) }}', '{{ addslashes($item['badge'] ?? '') }}', '{{ addslashes($item['subtitle'] ?? '') }}', '{{ addslashes($item['detail_content'] ?? '') }}')"
-                                            class="group block w-full py-3 sm:py-3.5 md:py-4 px-4 sm:px-5 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90 rounded-sm"
-                                            style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
-                                        <span class="block font-serif italic text-sm sm:text-[15px] md:text-base leading-snug tracking-wide break-words"
-                                              style="color: var(--theme-btn-text);">
-                                            {{ $item['title'] }}
-                                        </span>
-                                    </button>
-
-                                @elseif(($item['action_type'] ?? '') === 'email')
-                                    <!-- Direct Email Action -->
-                                    @php
-                                        $mailUrl = $item['url'] ?? '';
-                                        if ($mailUrl && !str_starts_with($mailUrl, 'mailto:')) {
-                                            $mailUrl = 'mailto:' . trim($mailUrl);
-                                        }
-                                    @endphp
-                                    <a href="{{ $mailUrl }}"
-                                       class="group block w-full py-3 sm:py-3.5 md:py-4 px-4 sm:px-5 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90 rounded-sm"
-                                       style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
-                                        <span class="block font-serif italic text-sm sm:text-[15px] md:text-base leading-snug tracking-wide break-words"
-                                              style="color: var(--theme-btn-text);">
-                                            {{ $item['title'] }}
-                                        </span>
-                                    </a>
-
-                                @else
-                                    <!-- Maps / External Link Action -->
-                                    <a href="{{ $item['url'] }}" target="_blank"
-                                       class="group block w-full py-3 sm:py-3.5 md:py-4 px-4 sm:px-5 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90 rounded-sm"
-                                       style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
-                                        <span class="block font-serif italic text-sm sm:text-[15px] md:text-base leading-snug tracking-wide break-words"
-                                              style="color: var(--theme-btn-text);">
-                                            {{ $item['title'] }}
-                                        </span>
-                                    </a>
-                                @endif
-                            @endforeach
-                        </div>
-
-                        <!-- EMPTY BOTTOM SPACER FOR BALANCED FLEX SPACING -->
-                        <div class="w-full h-1 shrink-0"></div>
 
                     </div>
                 @endforeach
@@ -541,17 +526,17 @@
             </div>
         </div>
 
-        <!-- BOTTOM BAR: Navigation Controls (Prev/Next on Mobile) + Footer Link -->
-        <footer class="w-full px-4 sm:px-6 pt-1.5 pb-[max(0.75rem,env(safe-area-inset-bottom,0.75rem))] flex items-center justify-between shrink-0 z-30 select-none">
+        <!-- BOTTOM BAR: Navigation Controls (Prev/Next) + Centered Footer Link -->
+        <footer class="w-full px-4 sm:px-6 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom,0.75rem))] flex items-center justify-between shrink-0 z-30 select-none">
             @if(count($slides) > 1)
-                <!-- Mobile Prev Slide Button -->
+                <!-- Prev Slide Button -->
                 <button @click="prevSlide()"
                         aria-label="Slide Sebelumnya"
-                        class="md:hidden flex items-center justify-center w-9 h-9 rounded-full bg-black/35 hover:bg-black/55 active:bg-black/75 text-white border border-white/15 active:scale-95 transition-all cursor-pointer shadow-sm">
-                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                        class="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/30 hover:bg-black/55 active:bg-black/75 text-white border border-white/15 active:scale-95 transition-all cursor-pointer shadow-xs">
+                    <i data-lucide="chevron-left" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                 </button>
             @else
-                <div class="w-9 md:hidden"></div>
+                <div class="w-8 sm:w-9"></div>
             @endif
 
             <!-- Centered Footer Badge Link -->
@@ -564,14 +549,14 @@
             </div>
 
             @if(count($slides) > 1)
-                <!-- Mobile Next Slide Button -->
+                <!-- Next Slide Button -->
                 <button @click="nextSlide()"
                         aria-label="Slide Berikutnya"
-                        class="md:hidden flex items-center justify-center w-9 h-9 rounded-full bg-black/35 hover:bg-black/55 active:bg-black/75 text-white border border-white/15 active:scale-95 transition-all cursor-pointer shadow-sm">
-                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                        class="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/30 hover:bg-black/55 active:bg-black/75 text-white border border-white/15 active:scale-95 transition-all cursor-pointer shadow-xs">
+                    <i data-lucide="chevron-right" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                 </button>
             @else
-                <div class="w-9 md:hidden"></div>
+                <div class="w-8 sm:w-9"></div>
             @endif
         </footer>
     </main>
