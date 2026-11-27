@@ -173,20 +173,6 @@
                     <span>Sesuaikan Tema & Warna</span>
                 </a>
             </div>
-
-            <!-- Quick WhatsApp Contact Pill -->
-            <div class="bg-emerald-50/60 rounded-3xl p-5 border border-emerald-100 flex items-center gap-3.5">
-                <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm">
-                    <i data-lucide="message-square" class="w-5 h-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <div class="text-[11px] font-bold text-emerald-800">WhatsApp Marketing Aktif</div>
-                    <div class="text-xs font-mono font-semibold text-emerald-950 truncate">{{ $settings['whatsapp_display'] ?? $settings['whatsapp'] ?? 'Belum diatur' }}</div>
-                </div>
-                <a href="{{ route('admin.settings.index') }}" class="p-2 rounded-lg text-emerald-700 hover:bg-emerald-100 transition-colors" title="Ubah WhatsApp">
-                    <i data-lucide="edit-2" class="w-4 h-4"></i>
-                </a>
-            </div>
         </div>
 
     </div>
