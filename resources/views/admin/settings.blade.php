@@ -385,7 +385,7 @@
                             <!-- Mini Card Header / Content -->
                             <div class="pt-1.5 pb-1 px-3.5 text-center flex flex-col items-center">
                                 <!-- Mini Circular White Logo Badge -->
-                                <div class="w-13 h-13 rounded-full p-1.5 bg-white shadow-md mx-auto mb-1.5 border flex items-center justify-center"
+                                <div class="w-13 h-13 rounded-full p-2 bg-white shadow-md mx-auto mb-1.5 border flex items-center justify-center overflow-hidden"
                                      :style="'border-color: ' + cardBorder + ';'">
                                     <img src="{{ asset($settings['logo'] ?? 'assets/logo kiw.png') }}" alt="Logo" class="w-full h-full object-contain">
                                 </div>

@@ -403,10 +403,10 @@
                         <div class="w-full flex flex-col items-center text-center shrink-0">
                             
                             <!-- Circular White Logo Badge -->
-                            <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-white shadow-xl flex items-center justify-center p-3 sm:p-4 mx-auto border-2 border-[var(--theme-card-border)]/40 shrink-0 select-none">
+                            <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-white shadow-xl flex items-center justify-center p-5 sm:p-6 mx-auto border-2 border-[var(--theme-card-border)]/40 shrink-0 overflow-hidden select-none">
                                 <img src="{{ asset($settings['logo'] ?? 'assets/logo kiw.png') }}"
                                      alt="{{ $settings['name'] ?? 'Logo' }}"
-                                     class="w-full h-full object-contain filter drop-shadow-xs select-none pointer-events-none">
+                                     class="w-full h-full object-contain select-none pointer-events-none">
                             </div>
 
                             <!-- Main Card Title -->
