@@ -14,10 +14,10 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset($settings['logo'] ?? 'assets/logo kiw.png') }}">
 
-    <!-- Google Fonts: Playfair Display (Serif), Cinzel, Plus Jakarta Sans, & Inter -->
+    <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -205,9 +205,10 @@
             --theme-btn-text: {{ $currentTheme['button_text'] }};
             --theme-btn-border: {{ $currentTheme['button_border'] }};
             --theme-card-radius: {{ $pixelRadius }};
+            --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
         }
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
             background-color: {{ $currentTheme['bg_body'] }};
             -webkit-tap-highlight-color: transparent;
             overflow-x: hidden;
@@ -237,14 +238,8 @@
                 max-width: 430px;
             }
         }
-        .font-serif {
-            font-family: 'Playfair Display', Georgia, Cambria, 'Times New Roman', serif;
-        }
-        .font-cinzel {
-            font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
-        }
         .font-display {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
         }
         .min-screen-h {
             min-height: 100vh;
@@ -415,14 +410,14 @@
                             </div>
 
                             <!-- Main Card Title -->
-                            <h1 class="font-serif font-bold text-2xl sm:text-3xl tracking-wider text-center uppercase mt-6 mb-2 leading-tight"
+                            <h1 class="font-display font-bold text-2xl sm:text-3xl tracking-wider text-center uppercase mt-6 mb-2 leading-tight"
                                 style="color: var(--theme-card-text);">
                                 {{ $slide['title'] }}
                             </h1>
 
                             <!-- Subtitle / Slide Prompt -->
                             @if(!empty($slide['subtitle']))
-                                <p class="font-serif font-medium text-xs sm:text-[13px] tracking-[0.16em] text-center uppercase mb-3"
+                                <p class="font-display font-medium text-xs sm:text-[13px] tracking-[0.16em] text-center uppercase mb-3"
                                     style="color: var(--theme-card-text); opacity: 0.9;">
                                     {{ $slide['subtitle'] }}
                                 </p>
@@ -441,7 +436,7 @@
                                     <a href="{{ $item['url'] }}" target="_blank"
                                        class="group block w-full py-4 sm:py-5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90"
                                        style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
-                                        <span class="block font-serif italic text-[15px] sm:text-base leading-snug tracking-wide"
+                                        <span class="block font-display font-medium text-[15px] sm:text-base leading-snug tracking-wide"
                                               style="color: var(--theme-btn-text);">
                                             {{ $item['title'] }}
                                         </span>
@@ -452,7 +447,7 @@
                                     <button @click="openInquiry('{{ addslashes($item['title']) }}')"
                                             class="group block w-full py-4 sm:py-5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90"
                                             style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
-                                        <span class="block font-serif italic text-[15px] sm:text-base leading-snug tracking-wide"
+                                        <span class="block font-display font-medium text-[15px] sm:text-base leading-snug tracking-wide"
                                               style="color: var(--theme-btn-text);">
                                             {{ $item['title'] }}
                                         </span>
@@ -470,7 +465,7 @@
                                     <a href="{{ $callUrl }}"
                                        class="group block w-full py-4 sm:py-5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90"
                                        style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
-                                        <span class="block font-serif italic text-[15px] sm:text-base leading-snug tracking-wide"
+                                        <span class="block font-display font-medium text-[15px] sm:text-base leading-snug tracking-wide"
                                               style="color: var(--theme-btn-text);">
                                             {{ $item['title'] }}
                                         </span>
@@ -481,7 +476,7 @@
                                     <button @click="openDetail('{{ addslashes($item['title']) }}', '{{ addslashes($item['badge'] ?? '') }}', '{{ addslashes($item['subtitle'] ?? '') }}', '{{ addslashes($item['detail_content'] ?? '') }}')"
                                             class="group block w-full py-4 sm:py-5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90"
                                             style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
-                                        <span class="block font-serif italic text-[15px] sm:text-base leading-snug tracking-wide"
+                                        <span class="block font-display font-medium text-[15px] sm:text-base leading-snug tracking-wide"
                                               style="color: var(--theme-btn-text);">
                                             {{ $item['title'] }}
                                         </span>
@@ -498,7 +493,7 @@
                                     <a href="{{ $mailUrl }}"
                                        class="group block w-full py-4 sm:py-5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90"
                                        style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
-                                        <span class="block font-serif italic text-[15px] sm:text-base leading-snug tracking-wide"
+                                        <span class="block font-display font-medium text-[15px] sm:text-base leading-snug tracking-wide"
                                               style="color: var(--theme-btn-text);">
                                             {{ $item['title'] }}
                                         </span>
@@ -509,7 +504,7 @@
                                     <a href="{{ $item['url'] }}" target="_blank"
                                        class="group block w-full py-4 sm:py-5 px-4 border transition-all duration-200 active:scale-[0.99] shadow-xs cursor-pointer text-center hover:opacity-90"
                                        style="background-color: var(--theme-btn-bg); border-color: var(--theme-btn-border); color: var(--theme-btn-text);">
-                                        <span class="block font-serif italic text-[15px] sm:text-base leading-snug tracking-wide"
+                                        <span class="block font-display font-medium text-[15px] sm:text-base leading-snug tracking-wide"
                                               style="color: var(--theme-btn-text);">
                                             {{ $item['title'] }}
                                         </span>
